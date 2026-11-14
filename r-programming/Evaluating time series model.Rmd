@@ -1,7 +1,5 @@
 ---
 title: "Evaluating Time Series Models"
-author: "Likitha"
-date: '2023-09-04'
 output: word_document
 ---
 
