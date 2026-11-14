@@ -1,0 +1,78 @@
+---
+title: "Residual_analysis"
+author: "Nivedha"
+date: "2023-08-30"
+output: html_document
+---
+
+### Residuals in a TS model are what is left over after fitting a model.
+### For almost all TS models the residuals are equal to difference between the observations. Residuals are useful to check whether the model has accurately captured information in the data. A good forecasting method will yield residuals with the following properties:
+* 1. The residuals are uncorrelated. If there is correlation between the residuals then it means that there is some information left in the residuals which should be used for computing forecasts.
+* 2. The residuals have 0 mean if they have a mean other than 0 it means that the forecast are biased.
+
+### Any forecasting methods which does not satisfy these properties can be improved it is possible to have several forecasting methods for the same data set all of which satisfies these properties. 
+### If any of these properties are not satisfied then the forecasting method can be modified to give better forecast. Also residuals must have the following properties:
+* They should have constant variance and they should be normally distributed.
+
+### Residual analysis can be performed using any of the following methods:
+* 1. Residual plot
+* 2. Histogram and Density plot
+* 3. QQ plot
+* 4. ACF and PACF plots
+* 5. Ljung-Box test
+* 6. Heteroscedasticity check
+* 7. Portmanteau test
+* 8. Mean of the residuals should be approximately 0 and variance should be relatively constant over time
+
+
+## Residual Analysis
+
+### Aim: To fit a suitable ARMA model for given data and perform residual analysis for the fitted model.
+
+### Data Description: Data regarding earthquakes from 1916 to 2015.
+
+```{r}
+library(readxl)
+data <- read_excel("C:/Users/Admin/Desktop/Nivedha/R/TS/Data_Practical_residuals.xlsx")
+head(data)
+```
+
+```{r}
+summary(data)
+```
+
+```{r}
+str(data)
+```
+
+```{r}
+ts_data<-ts(data$Quakes, start=1916)
+```
+
+```{r}
+ts_plot<-ts.plot(ts_data,xlab="Year")
+```
+
+### It looks like there is no trend in the graph of the data and it looks stationary. 
+
+### Use ADF test 
+* H0: The TS has a unit root i.e the data is non stationary
+* H1: The TS has no unit root i.e the data is stationary
+
+
+```{r}
+library(tseries)
+adf.test(ts_data)
+```
+
+### Since p value is < 0.05, we reject H0 and conclude that the data is stationary
+
+```{r}
+acf(ts_data)
+```
+
+
+```{r}
+pacf(ts_data)
+```
+

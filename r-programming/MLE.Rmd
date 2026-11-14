@@ -1,0 +1,64 @@
+---
+title: "MLE"
+author: "Nivedha"
+date: "2023-08-30"
+output: html_document
+---
+
+#### Interpretation and fitting of model remaining
+
+```{r}
+library(readr)
+# data <- read_csv("C:/Users/Admin/Desktop/Nivedha/R/TS/exchange_rates.csv")
+data=c(12,65,34,98,23,54,12,74,17,18,32)
+```
+
+```{r}
+plot(data)
+```
+
+
+```{r}
+model<-arima(data,order = c(1,0,1),method="ML")
+model1<-arima(data,order = c(3,0,1),method="ML")
+```
+
+```{r}
+print(model)
+```
+
+```{r}
+print(model1)
+```
+
+
+```{r}
+library(forecast)
+data("AirPassengers")
+(AirPassengers)
+```
+
+```{r}
+plot(AirPassengers)
+```
+
+
+```{r}
+ts_data<-ts(AirPassengers,frequency = 1)
+```
+
+
+```{r}
+order_pq=c(2,0,2)
+```
+
+
+```{r}
+model_1<-arima(ts_data,order=order_pq)
+model_1
+```
+
+```{r}
+
+```
+
