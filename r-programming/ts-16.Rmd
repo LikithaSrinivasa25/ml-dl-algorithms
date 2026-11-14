@@ -1,0 +1,57 @@
+---
+title: "MANOVA"
+date: "09-09-2023"
+output: word_document
+---
+
+MANOVA (Multivariate Analysis Of Variance) is an extension of ANOVA used when multiple dependent variables need analysis across various groups of an independent variable. It helps reduce type I errors compared to conducting separate ANOVA tests for each dependent variable.Because MANOVA uses more than one dependent variable, the null and the alternative hypotheses are slightly changed:
+
+* H0: Group mean vectors are the same for all groups or they don’t differ significantly.
+* H1: At least one of the group mean vectors is different from the rest.
+
+MANCOVA (Multivariate Analysis of Covariance) is an extension of ANCOVA, integrating MANOVA and covariates. It assesses differences in multiple continuous dependent variables across groups while controlling for covariates. Both MANOVA and MANCOVA provide a comprehensive approach to evaluating group differences compared to ANOVA or ANCOVA.
+
+
+## AIM : 
+* To perform MANOVA and MANCOVA on iris dataset 
+* To check if there is any significant difference, in sepal and petal length, between the different species.
+
+```{r}
+## Load required libraries
+library("dplyr")
+library(jmv)
+
+## Iris Dataset
+my_data <- iris
+
+## Display random rows from the dataset
+set.seed(1234)
+dplyr::sample_n(my_data, 5)
+
+```
+
+### MANOVA 
+* H0:There is no significant difference between Sepal.Length, Petal.Length across diffenent sprecies
+* H1:There is significant difference between Sepal.Length, Petal.Length across at least one sprecies
+
+```{r}
+res.man <- manova(cbind(Sepal.Length, Petal.Length) ~ Species, data = iris)
+summary(res.man)
+```
+
+By default, MANOVA in R uses Pillai’s Trace test statistic. The P-value is practically zero, which means we can safely reject the null hypothesis in the favor of the alternative one – at least one group mean vector differs from the rest.
+
+```{r}
+# Look to see which differ
+summary.aov(res.man)
+```
+### MANCOVA 
+```{r}
+mancova(data = iris,
+        deps = vars(Sepal.Length, Petal.Length),
+        factors = Species)
+```
+From the output above, it can be seen that the two variables are highly significantly different among Species.
+
+## CONCLUSION:
+In conclusion, the analysis reveals statistical evidence to reject the null hypothesis, indicating that there are substantial and highly significant differences in sepal and petal length among different species.

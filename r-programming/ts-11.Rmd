@@ -1,0 +1,120 @@
+---
+title: "SARIMA"
+author: "Likitha"
+date: '2023-09-01'
+output: word_document
+---
+
+## SARIMA stands for Seasonal AutoRegressive Integrated MOving Average method. SARIMA accounts for seasonality in the data. These are used to address the complexities and seasonality often present in the data. 
+
+
+## Load the AirPassengers dataset
+```{r}
+data("AirPassengers")
+```
+
+## Plot the data
+```{r}
+
+plot(AirPassengers)
+```
+## Install and load required libraries
+```{r}
+
+#install.packages("forecast")
+library(forecast)
+```
+
+##  Apply first-order differencing
+```{r}
+
+differenced_data <- diff(AirPassengers)
+```
+
+# ACF and PACF plots
+```{r}
+acf(differenced_data, lag.max = 40)
+pacf(differenced_data, lag.max = 40)
+```
+## Create the SARIMA model with identified orders
+
+```{r}
+sarima_model <- Arima(AirPassengers, order=c(0, 1, 1), seasonal=c(0, 1, 1)) #seasonal.periods = 12
+```
+
+## Split the data into training and testing
+```{r}
+train_data <- window(AirPassengers, end=c(1958, 12))
+test_data <- window(AirPassengers, start=c(1959, 1))
+```
+
+## Forecast future values
+
+```{r}
+forecasted_values <- forecast(sarima_model, h=length(test_data))
+```
+
+
+# Plot actual vs. forecasted values
+```{r}
+
+plot(forecasted_values, main="SARIMA Forecast vs. Actual")
+#lines(test_data, col="red")
+```
+
+## Custom Dataset: 
+### Dataset: Earth Quake Dataset which gives the number of quakes ocurred in the years. 
+
+## Loading the dataset
+```{r}
+library(readxl)
+Earth_quake <- read_excel("C:/Users/Admin/Downloads/Earth_quake.xlsx")
+head(Earth_quake)
+```
+
+
+## Description of Data
+```{r}
+quake = subset(Earth_quake, select= -c(Year))
+qua_data= ts(quake)
+head(qua_data)
+ts.plot(qua_data)
+summary(qua_data)
+```
+
+### From the graph it is evident that there is an increasing trend in the data. There is no presence of seasonality in the data.  We can infer that the data is non-stationary
+
+## ACF and PACF Plots
+```{r}
+acf(qua_data)
+pacf(qua_data)
+```
+## Elimination of Trend 
+```{r}
+diff_data = diff(qua_data)
+acf(diff_data)
+pacf(diff_data)
+```
+
+## Create the SARIMA model with identified orders
+```{r}
+sarima_model <- Arima(diff_data, order=c(1, 1, 1), seasonal=c(0, 1, 1)) #seasonal.periods = 12
+```
+
+## Split the data into training and testing
+```{r}
+train_data <- window(diff_data)
+test_data <- window(diff_data)
+```
+
+## Forecast future values
+
+```{r}
+forecasted_values <- forecast(sarima_model, h=length(test_data))
+```
+
+
+# Plot actual vs. forecasted values
+```{r}
+plot(forecasted_values, main="SARIMA Forecast vs. Actual")
+```

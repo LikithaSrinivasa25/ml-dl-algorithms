@@ -1,0 +1,144 @@
+---
+title: "Time Series Smoothing"
+date: '2023-09-04'
+output: word_document
+---
+
+
+# To make the data stationary using smoothing techniques
+
+## Smoothing using Simple Moving Average
+
+## Load the data
+```{r}
+data<-AirPassengers
+```
+
+## Time Series plot
+```{r}
+plot(data,main='Simple Moving Average (SMA)',ylab='Passengers')
+```
+## From the time series plot, it is evident that there exists seasonal component in the given data.
+
+
+## Simple Moving Average using rollmean
+```{r}
+data<-AirPassengers
+library(zoo)
+plot(data,main='Simple Moving Average (SMA)',ylab='Passengers')
+
+```
+
+### From the plot we can see that the black curve has some jagged parts, which tend to repeat themselves. We may want to smooth them out to get a ‘high level summary’ of the seasonal component. The blue curve gives that to us. The red curve, with a larger filter size, focuses more on the trend. The simple moving average seems to do a good job at different levels of smoothing.
+
+## Triangular Moving Average
+```{r}
+p=5
+plot(rollmean(data,p),main=' Triangular Moving Average',ylab='Discoveries')
+
+
+```
+
+### We can see that the triangular moving average is smoother and has less noise than both of the simple moving averages, but keeps more of the peaks than the simple moving average with filter size 10.
+
+## Kernel Smoothing
+```{r}
+last_point = 100
+b=1
+plot(0.1*0:last_point,exp(-(0.1*0:last_point)^2/(2*b^2)),type='l',xlab='distance',ylab='weight',main='Gaussian Kernel Weights')
+b=2
+lines(0.1*0:last_point,exp(-(0.1*0:last_point)^2/(2*b^2)),type='l',col='red')
+b=5
+lines(0.1*0:last_point,exp(-(0.1*0:last_point)^2/(2*b^2)),type='l',col='blue')
+legend(7,1,legend=c('b=1','b=2','b=5'),col=c('black','red','blue'),cex=0.8,lty=1)
+
+```
+
+### We see that the greater the bandwidth, the slower the weight decay, and thus the more weights there are that are not (very close to) zero. Thus greater bandwidth gives more smoothing. 
+
+## Simple Moving Average vs Kernel Smoothing
+```{r}
+p=5
+b=4
+plot(rollmean(data,p),main='Simple Moving Average vs Kernel Smoothing',ylab='Discoveries')
+lines(rollmean(data,10),col='red')
+lines(ksmooth(time(data),data,'normal',bandwidth=b),type='l',col='blue')
+legend(1935,8,col=c('black','red','blue'),legend=c('SMA 5', 'SMA 10', 'Kernel,b=4'),lty=1,cex=0.8)
+
+```
+### Like the triangular moving average, we see that the kernel smoother is smoother than both simple moving averages, while keeping the peaks that the simple moving average with filter size 10 smooths out. 
+
+## Traingular Moving Average vs Kernel Smoothing
+```{r}
+plot(rollmean(rollmean(data,5),5),main='Triangular Moving Average vs Kernel Smoothing',ylab='Discoveries')
+lines(ksmooth(time(data),data,'normal',bandwidth=b),type='l',col='blue')
+legend(1935,6,col=c('black','blue'),legend=c('TMA 5','Kernel b=4'),lty=1,cex=0.8)
+
+```
+
+### They look almost identical, although the kernel smoother seems slightly smoother.
+
+## For Custom Dataset
+### Dataset: The dataset reporesent the electric production of every year from 1950 to 2000
+
+## Loading the data
+```{r}
+library(readxl)
+Dataset <- read_excel("C:/Users/Admin/Downloads/Dataset1.xlsx")
+View(Dataset)
+head(Dataset)
+```
+
+## Description of Data
+```{r}
+pro = subset(Dataset, select= -c(Year))
+data= ts(pro)
+head(data)
+ts.plot(data)
+summary(data)
+
+```
+
+
+### From the graph it is evident that there is an increasing trend in the data. There is no presence of seasonality in the data.  We can infer that the data is non-stationary
+
+
+## Simple Moving Average using rollmean
+```{r}
+plot(data,main='Simple Moving Average (SMA)',ylab='Number of People Vaccinated')
+lines(rollmean(data,5),col='blue')
+lines(rollmean(data,40),col='red')
+legend(1950,600,col=c('black','blue', 'red'),legend=c('Raw', 'SMA 5', 'SMA 40'),lty=1,cex=0.8)
+
+```
+
+### From the plot we can see that the black curve and the blue curve are almost identical to each other.  The red curve, with a larger filter size, focuses more on the trend. The simple moving average seems to do a good job at different levels of smoothing.
+
+
+## Triangular Moving Average
+```{r}
+p=5
+plot(rollmean(data,p),main='Simple vs Triangular Moving Average',ylab='Number of Vaccinated poeple')
+lines(rollmean(data,10),col='red')
+lines(rollmean(rollmean(data,5),5),col='blue')
+legend(1935,8,col=c('black','red','blue'),legend=c('SMA 5', 'SMA 10','TMA 5'),lty=1,cex=0.8)
+
+```
+
+### ### We can see that the triangular moving average is smoother and also has less noise with filter size 10.
+
+
+## Kernel Smoothing
+```{r}
+last_point = 100
+b=1
+plot(0.1*0:last_point,exp(-(0.1*0:last_point)^2/(2*b^2)),type='l',xlab='distance',ylab='weight',main='Gaussian Kernel Weights')
+b=2
+lines(0.1*0:last_point,exp(-(0.1*0:last_point)^2/(2*b^2)),type='l',col='red')
+b=5
+lines(0.1*0:last_point,exp(-(0.1*0:last_point)^2/(2*b^2)),type='l',col='blue')
+legend(7,1,legend=c('b=1','b=2','b=5'),col=c('black','red','blue'),cex=0.8,lty=1)
+
+```
+
+

@@ -1,0 +1,98 @@
+---
+title: "Evaluating Time Series Models"
+author: "Likitha"
+date: '2023-09-04'
+output: word_document
+---
+
+# To evaluate time series models using AIC.
+
+## Load the required packages
+```{r}
+library(forecast)
+```
+
+
+## Generate random time series data and Get the data points in form of a R vector.
+```{r}
+rain <- c(987,1025,978,774,1563,569,1456,789,1479,566,1563,1698)
+
+```
+
+## Convert it to a time series object.
+```{r}
+rain_ts <- ts(rain,start = c(2020,1),frequency = 12)
+print(rain_ts)
+```
+
+## Timem Series Plot of the data
+```{r}
+plot(rain_ts, main = "Time series data")
+```
+
+## Summary of data
+```{r}
+summary(rain_ts)
+```
+## Build a model using arima()
+
+```{r}
+
+model <- arima(rain_ts, order = c(1,0,0))
+model
+```
+
+```{r}
+
+model2 <- arima(rain_ts, order = c(2,0,0))
+
+model2
+```
+### The lower the aic term , the better the model.Hence we choose the a model with order - (1,0,0)
+
+## Calculate the AIC values
+```{r}
+
+AIC(model)
+AIC(model2)
+
+```
+### Clearly the model1 with arima parameters (1,0,0) is better then model2 as the AIC value of model 1 (179.4) is lesser then AIC of model 2 (181.2)
+
+## Custom Dataset
+### Dataset: Number of Covid-19 Vaccinated people from 15 January 2021 to March 12th 2021
+
+## Loading the data
+```{r}
+library(readxl)
+Production <- read_excel("C:/Users/Admin/Downloads/Dataset1.xlsx")
+View(Production)
+head(Production)
+```
+
+## Description of Data
+```{r}
+pro = subset(Production, select= -c(Year))
+data= ts(pro)
+head(data)
+ts.plot(data)
+summary(data)
+
+```
+## Build a model using arima()
+
+```{r}
+model_p1 <- arima(data, order = c(1,0,0))
+model_p1
+```
+
+```{r}
+model_p2 <- arima(data, order = c(1,1,0))
+model_p2
+```
+```{r}
+model_p3 <- arima(data, order = c(2,1,0))
+model_p3
+```
+### Comparing the models, the model with the lowest AIC score wil be chosen that is model 3 with an AR(2) process and a differencing factor of 1.
+

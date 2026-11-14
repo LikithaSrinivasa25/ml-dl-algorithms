@@ -1,0 +1,113 @@
+---
+title: "Decomposition of Time Series"
+date: '2023-09-04'
+output:
+  word_document: default
+  pdf_document: default
+---
+
+### To decompose a given time series data into it's components
+
+```{r}
+data("AirPassengers")
+library(TSstudio)
+ts_info(AirPassengers)
+```
+## Plot of the Time Series Data
+```{r}
+plot(AirPassengers,
+        title = "Monthly Airline Passenger Numbers 1949-1960",
+        Ytitle = "Thousands of Passengers")
+```
+
+## In the above plot we can visualize that there is presence of both trend and seasonality in the given data. 
+
+## Classical Decomposition
+### The classical decomposition is one of the most common estimation methods of the series components.
+```{r}
+d = decompose(AirPassengers)
+str(d)
+plot(d)
+```
+
+### The function plot(decomposed_data) plots the four components present in the data. We can notice that the random component is not so random. The trend and the seasonal component are much evident in the data. 
+
+## By default, the decompose method decomposed the components based on additive structure. 
+## Decomposition of Multiplicative Time Series
+
+```{r}
+d_m <- decompose(AirPassengers, type = "multiplicative")
+
+plot(d_m)
+```
+### Both the Additive and the Multiplicative Model do not vary much in their patterns.
+
+## Visualizing both additive and multiplicative together
+```{r}
+ts_decompose(AirPassengers, type = "both")
+
+```
+
+## Estimating Trend
+
+## Loading the required packages
+```{r}
+library(plotly)
+library(dplyr)
+library(lubridate)
+```
+
+## We use the two-sided moving average smoothing with the help of ts_ma
+```{r}
+ap_smooth <- ts_ma(AirPassengers, n = 6,
+                   separate = FALSE)
+```
+### Plot of the series with the trend estimation.
+
+## Custom Dataset: Monthly Sunspot Data 
+
+## Loading the data
+```{r}
+data=sunspot.month
+View(data)
+```
+
+
+## Description of Data
+```{r}
+str(data)
+summary(data)
+```
+### The dataset comprises monthly number of sunspots from 1749 to 2014. The average number of sunspots in a month is 51.96. 
+
+## Time Series plot of the data
+```{r}
+ts_plot(data)
+```
+### From the plot it is evident that there exists a seasonal component in the data.
+
+## Classical Decomposition
+```{r}
+sun_dec = decompose(data)
+str(sun_dec)
+plot(sun_dec)
+```
+### In the above plots we can clearly see the presence of components. 
+
+## For Multiplicative model:
+```{r}
+sun_dec = decompose(data, type="multiplicative")
+str(sun_dec)
+plot(sun_dec)
+```
+
+### Both Multiplicative and Additive models have the similar structure.
+
+## Estimating Trend
+
+## We use the two-sided moving average smoothing with the help of ts_ma
+```{r}
+ss_smooth <- ts_ma(data, separate = TRUE, n=13)
+```
+
+

@@ -1,0 +1,81 @@
+---
+title: "Quadratic Trend"
+author: "Likitha"
+date: '2023-09-04'
+output: word_document
+---
+
+## A quadratic trend, refers to a trend component in the data that follows a quadratic or parabolic pattern over time. A quadratic trend is characterized by a curving or U-shaped pattern in the time series data, indicating that the data values are changing at an accelerating or decelerating rate.Mathematically, a quadratic trend can be represented as follows:
+
+* Y_t = α + β_1 * t + β_2 * t^2 + ε_t
+
+
+## Load the data
+```{r}
+#install.packages("TSA")
+library(TSA)
+```
+
+```{r}
+data(hours)
+hours
+```
+
+## Plot of the Time Series Data
+```{r}
+ts.plot(hours, type="o", ylab="wages per hour")
+```
+
+## The given time series data is non stationary as there is clear evidence of trend and seasonal component.
+```{r}
+data(wages)
+plot(wages,type='o',ylab='ages per hour')
+```
+
+## Quadratic model
+```{r}
+wages.qm = lm(wages ~ time(wages) +I(time(wages)^2))
+summary(wages.qm)
+```
+## Time series plot of the standardized residuals
+```{r}
+
+plot(y=rstandard(wages.qm), x=as.vector(time(wages)), type = 'o')
+```
+## Custom Dataset:
+### Dataset: Number of Covid-19 Vaccinated people from 15 January 2021 to March 12th 2021
+
+## Loading the data
+```{r}
+library(readxl)
+Earth_quake <- read_excel("C:/Users/Admin/Downloads/Earth_quake.xlsx")
+View(Earth_quake)
+head(Earth_quake)
+```
+
+## Description of Data
+```{r}
+quake = subset(Earth_quake, select= -c(Year))
+data= ts(quake)
+head(data)
+ts.plot(data)
+summary(data)
+
+```
+
+
+### From the graph it is evident that there is an increasing trend in the data. There is no presence of seasonality in the data.  We can infer that the data is non-stationary
+
+# Quadratic model
+```{r}
+data.qm = lm(data ~ time(data) +I(time(data)^2))
+summary(data.qm)
+```
+
+
+# Time series plot of the standardized residuals
+```{r}
+
+plot(y=rstandard(data.qm), x=as.vector(time(data)), type = 'o')
+```
+
