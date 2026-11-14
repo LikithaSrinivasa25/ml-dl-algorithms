@@ -1,6 +1,5 @@
 ---
 title: "MANOVA"
-date: "09-09-2023"
 output: word_document
 ---
 
