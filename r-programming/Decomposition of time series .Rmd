@@ -1,6 +1,5 @@
 ---
 title: "Decomposition of Time Series"
-date: '2023-09-04'
 output:
   word_document: default
   pdf_document: default
