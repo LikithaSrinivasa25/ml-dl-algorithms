@@ -1,6 +1,5 @@
-#04-09-2023 
 
-#PROGRAM 12 - Decomposition of Time Series
+#Decomposition of Time Series
 
 #Generally, we can categorize patterns in time series data into the following two categories:
   
@@ -15,7 +14,7 @@
 #We can express those components using the following notation
 
 #additive structure: Yt=Tt+Ct+St+It
-#multiplicative structure: Yt=Tt×Ct×St×It
+#multiplicative structure: Yt=TtÃ—CtÃ—StÃ—It
 
 # AIM : To decompose time series data, with the goal of separating it into its 
 #fundamental components: the trend, seasonal patterns, and irregular fluctuations.
