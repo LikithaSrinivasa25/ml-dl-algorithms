@@ -1,0 +1,32 @@
+# Question 3: Write a R program to create a dataframe with following details and 
+# do the following operations 
+
+itemCode<-c(1001,1002,1003,1004,1005)
+itemCategory<-c("Electronics","Desktop Supplies","Office Supplies","USB","CD Drive")
+ItemPrice<-c(700,300,350,400,800)
+df<-data.frame(itemCode,itemCategory,ItemPrice)
+df
+
+# a. Subset the dataframe and display the details of only those items whose prices
+# are greater than or equal to 350
+
+subset(df,ItemPrice>=350)
+
+# b. Subset the dataframe and display only the items where the category is either 
+# office supplies or desktop supplies
+
+subset(df,itemCategory=="Office Supplies"|itemCategory=="Desktop Supplies")
+
+# c. Create an dataframe called itemDetails with three different fields: itemCode 
+# ItemQtyonHand, ItemReorderLvl and merge the two dataframes
+
+itemCode<-c(1001,1002,1003,1004,1005)
+ItemQtyonHand<-c(69,67,32,9,420)
+ItemReorderLvl<-c(7,3,35,4,8)
+itemDetails<-data.frame(itemCode,ItemQtyonHand,ItemReorderLvl)
+itemDetails
+
+ # Merging the two dataframes
+
+dataframe<-merge(df,itemDetails,by="itemCode")
+dataframe
