@@ -1,4 +1,4 @@
-# ML, DL, NLP & Computer Vision Portfolio
+# ML, DL, NLP, R Programming & Computer Vision Portfolio
 
 Practicals from my MSc in Data Science, covering classic machine learning, deep learning, NLP, computer vision and R. Built with Python in Google Colab.
 
